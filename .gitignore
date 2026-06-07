@@ -1,0 +1,13 @@
+# 生成產物（小兵輸出），不進版控
+build/
+assets/frames/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# 機密
+.env
+.vscode/
