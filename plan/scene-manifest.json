@@ -1,0 +1,210 @@
+{
+  "_comment": "這是整個 B-roll 工廠的核心契約。將軍（你 + Claude Code Plan Mode）只改這個檔，小兵（腳本）就照新規格重跑。所有場景描述皆為原創風格設定，未指涉任何受著作權保護的特定作品。",
+  "schema_version": "1.0",
+
+  "project": {
+    "name": "broll-factory",
+    "title": "和風妖怪傳說 B-roll",
+    "fps": 24,
+    "resolution": "1920x1080",
+    "aspect_ratio": "16:9",
+    "estimated_total_sec": 50
+  },
+
+  "style": {
+    "_comment": "全域風格。gen_prompts.py 會把這裡的設定套到每個場景，避免每筆重複寫。",
+    "aesthetic": "1990s hand-drawn cel animation, ukiyo-e composition, heavy ink outlines, painterly cel shading",
+    "era_reference": "Heian-period Japan, supernatural folklore",
+    "palette": ["vermilion", "sumi ink black", "gold leaf", "indigo", "earthy brown"],
+    "avoid": ["modern objects", "text", "watermark", "photorealism", "3D render look", "recognizable existing characters"],
+    "render_model": {
+      "default": "gemini-3.1-flash-image-preview",
+      "high_fidelity": "gemini-3-pro-image-preview",
+      "stylized_alt": "imagen-4.0-ultra-generate-001",
+      "_note": "高度風格化空鏡可在測試時比對 stylized_alt；需角色跨場景一致時用 default。"
+    },
+    "prompt_template": "{subject}. {details}. Visual style: {aesthetic}, set in {era_reference}. Color palette: {palette}. Lighting: {lighting}. Mood: {mood}. Camera: {camera_desc}. Avoid: {avoid}."
+  },
+
+  "audio": {
+    "_comment": "四個音樂段落。assemble.py 依場景的 audio_segment 對齊音軌。建議從無版權音樂庫取得。",
+    "segments": {
+      "ambient":    { "style": "traditional Japanese ambient", "instruments": ["shakuhachi", "koto", "low taiko", "wind chimes"], "bpm": [50, 70], "mood": "ethereal, suspenseful" },
+      "rising":     { "style": "traditional x electronic transition", "instruments": ["building taiko", "low drone", "heartbeat pulse"], "bpm": [80, 110], "mood": "tense, oppressive" },
+      "combat":     { "style": "Japanese rock fusion (wa-rock)", "instruments": ["distorted electric guitar", "taiko", "shamisen riff"], "bpm": [140, 180], "mood": "intense, explosive" },
+      "resolution": { "style": "traditional Japanese ambient (reprise)", "instruments": ["solo shakuhachi", "koto", "reverb tail"], "bpm": [50, 60], "mood": "calm, reflective" }
+    },
+    "edit_rules": [
+      "戰鬥剪輯點壓在鼓點或吉他 riff 的重拍上。",
+      "rising 轉 combat 之間插入約 0.5 秒靜默再爆發，放大反差。"
+    ]
+  },
+
+  "scenes": [
+    {
+      "id": "1-1", "section": "ambient_mystery", "title": "神社入口",
+      "duration_sec": 5, "frames_needed": 1, "motion": "ken_burns_in", "audio_segment": "ambient",
+      "prompt": {
+        "subject": "a vermilion torii gate emerging from morning mist",
+        "details": "moss-covered stone steps, faint dawn fog, distant cedar trees",
+        "lighting": "soft morning fog with volumetric light rays",
+        "mood": "mysterious, sacred",
+        "camera_desc": "slow push-in, shallow depth of field"
+      }
+    },
+    {
+      "id": "1-2", "section": "ambient_mystery", "title": "古井與符咒",
+      "duration_sec": 4, "frames_needed": 1, "motion": "static_slow_drift", "audio_segment": "ambient",
+      "prompt": {
+        "subject": "an old wooden well in a quiet shrine courtyard",
+        "details": "paper talismans fluttering on a rope, weathered wood, dim overcast light",
+        "lighting": "flat diffuse daylight, slightly desaturated",
+        "mood": "eerie stillness",
+        "camera_desc": "locked-off shot with subtle handheld sway"
+      }
+    },
+    {
+      "id": "1-3", "section": "ambient_mystery", "title": "月下森林",
+      "duration_sec": 5, "frames_needed": 1, "motion": "ken_burns_up", "audio_segment": "ambient",
+      "prompt": {
+        "subject": "a moonlit forest of towering cedar silhouettes",
+        "details": "full moon, drifting fireflies, layered mist between trunks",
+        "lighting": "cool blue moonlight, deep shadow",
+        "mood": "haunting, dreamlike",
+        "camera_desc": "low-angle tilt looking upward"
+      }
+    },
+    {
+      "id": "1-4", "section": "ambient_mystery", "title": "浮世繪過場",
+      "duration_sec": 3, "frames_needed": 1, "motion": "horizontal_pan", "audio_segment": "ambient",
+      "prompt": {
+        "subject": "stylized ukiyo-e waves and cloud patterns, flat graphic plane",
+        "details": "bold woodblock-print linework, layered curling waves, gold-flecked sky",
+        "lighting": "flat decorative shading",
+        "mood": "transitional, graphic",
+        "camera_desc": "smooth horizontal pan across the plane"
+      }
+    },
+    {
+      "id": "2-1", "section": "rising_tension", "title": "妖氣聚集",
+      "duration_sec": 4, "frames_needed": 1, "motion": "handheld_shake", "audio_segment": "rising",
+      "prompt": {
+        "subject": "purple-black mist swirling above barren ground",
+        "details": "trembling dead branches, faint glowing motes within the mist",
+        "lighting": "low-key, sickly violet glow",
+        "mood": "menacing, building dread",
+        "camera_desc": "handheld unstable framing"
+      }
+    },
+    {
+      "id": "2-2", "section": "rising_tension", "title": "武者剪影",
+      "duration_sec": 4, "frames_needed": 1, "motion": "slow_orbit", "audio_segment": "rising",
+      "prompt": {
+        "subject": "a backlit silhouette of a sword-bearing warrior",
+        "details": "robe hem fluttering in wind, faint rim light on the blade edge",
+        "lighting": "strong backlight, deep silhouette",
+        "mood": "ominous resolve",
+        "camera_desc": "slow orbital move around the figure"
+      }
+    },
+    {
+      "id": "2-3", "section": "rising_tension", "title": "眼神特寫",
+      "duration_sec": 2, "frames_needed": 1, "motion": "rapid_zoom_in", "audio_segment": "rising",
+      "prompt": {
+        "subject": "an extreme close-up of an anime-style eye",
+        "details": "sharp catchlight reflection, dilating pupil, hand-drawn lash detail",
+        "lighting": "high contrast, single highlight",
+        "mood": "alert, charged",
+        "camera_desc": "rapid zoom-in to the iris"
+      }
+    },
+    {
+      "id": "2-4", "section": "rising_tension", "title": "符紙燃燒",
+      "duration_sec": 3, "frames_needed": 1, "motion": "slow_motion_drift", "audio_segment": "rising",
+      "prompt": {
+        "subject": "a paper talisman igniting with spiritual energy",
+        "details": "scattering embers, curling burnt edges, faint blue spirit flame",
+        "lighting": "warm firelight against dark background",
+        "mood": "ritual tension",
+        "camera_desc": "slow-motion, embers drifting toward camera"
+      }
+    },
+    {
+      "id": "3-1", "section": "combat_climax", "title": "拔刀斬擊",
+      "duration_sec": 1, "frames_needed": 1, "motion": "fast_horizontal_swipe", "audio_segment": "combat",
+      "prompt": {
+        "subject": "a blade slash cutting across the frame",
+        "details": "hand-drawn speed lines, motion blur arc, sparks at the edge",
+        "lighting": "high-energy flash highlight",
+        "mood": "explosive impact",
+        "camera_desc": "fast horizontal whip across the cut"
+      }
+    },
+    {
+      "id": "3-2", "section": "combat_climax", "title": "衝擊波",
+      "duration_sec": 2, "frames_needed": 1, "motion": "camera_shake", "audio_segment": "combat",
+      "prompt": {
+        "subject": "an energy shockwave bursting outward",
+        "details": "cracking ground, flying debris, radial dust cloud, glowing core",
+        "lighting": "intense central glow, hard rim light",
+        "mood": "overwhelming force",
+        "camera_desc": "violent camera shake"
+      }
+    },
+    {
+      "id": "3-3", "section": "combat_climax", "title": "空中交鋒",
+      "duration_sec": 2, "frames_needed": 1, "motion": "whip_pan", "audio_segment": "combat",
+      "prompt": {
+        "subject": "two silhouettes clashing in mid-air",
+        "details": "afterimage trails, swirling debris, dramatic diagonal composition",
+        "lighting": "backlit clash with lens-flare-free glow",
+        "mood": "peak confrontation",
+        "camera_desc": "rapid whip pan tracking the collision"
+      }
+    },
+    {
+      "id": "3-4", "section": "combat_climax", "title": "浮世繪定格",
+      "duration_sec": 2, "frames_needed": 1, "motion": "freeze_with_jitter", "audio_segment": "combat",
+      "prompt": {
+        "subject": "the moment of impact frozen as a ukiyo-e woodblock still",
+        "details": "flat gold-leaf background, bold print outlines, decorative wave motifs",
+        "lighting": "flat graphic shading",
+        "mood": "stylized climax",
+        "camera_desc": "freeze frame with slight jitter"
+      }
+    },
+    {
+      "id": "4-1", "section": "resolution", "title": "飄落花瓣",
+      "duration_sec": 5, "frames_needed": 1, "motion": "follow_fall", "audio_segment": "resolution",
+      "prompt": {
+        "subject": "cherry blossom and red maple petals drifting down",
+        "details": "soft bokeh background, gentle descent, scattered petals on ground",
+        "lighting": "warm soft daylight",
+        "mood": "melancholic calm",
+        "camera_desc": "slow downward follow of falling petals"
+      }
+    },
+    {
+      "id": "4-2", "section": "resolution", "title": "夕陽神社",
+      "duration_sec": 6, "frames_needed": 1, "motion": "ken_burns_out", "audio_segment": "resolution",
+      "prompt": {
+        "subject": "a shrine in golden-hour backlight",
+        "details": "long shadows, drifting dust in light, silent empty courtyard",
+        "lighting": "warm dusk backlight, long shadows",
+        "mood": "peaceful resolution",
+        "camera_desc": "slow pull-out"
+      }
+    },
+    {
+      "id": "4-3", "section": "resolution", "title": "水面倒影",
+      "duration_sec": 5, "frames_needed": 1, "motion": "static_ripple", "audio_segment": "resolution",
+      "prompt": {
+        "subject": "a still pond reflecting the dusk sky",
+        "details": "expanding ripples, mirrored clouds, faint floating leaves",
+        "lighting": "soft reflected dusk colors",
+        "mood": "quiet closure",
+        "camera_desc": "top-down locked-off shot"
+      }
+    }
+  ]
+}
